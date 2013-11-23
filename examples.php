@@ -11,7 +11,6 @@ $json = json_decode($response);
 if ($json->status == 'OK') {
     $elevation = $json->results[0]->elevation;
 }
-echo $elevation;
 
 // example - get the elevation of a set of points in SimpleXML
 $request = new GoogleMapAPI\Service\ElevationService();
@@ -27,4 +26,3 @@ if ($xml->status == 'OK') {
         array_push($elevation_list, (float) $result->elevation);
     }
 }
-var_dump($elevation_list);
