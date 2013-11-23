@@ -2,6 +2,7 @@
 
 /**
  * This is the main class for Google Elevation Service
+ * @url https://developers.google.com/maps/documentation/elevation/
  * For licensing and examples:
  *
  * @see https://github.com/jacobemerick/google-map-services
