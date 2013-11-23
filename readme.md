@@ -19,7 +19,6 @@ Depending on which service you try to use there may be some minimum settings, th
 
 Future Enhancements
 ------------------
- - geocoding class
  - directions
  - distance matrix
  - timezone
@@ -29,6 +28,7 @@ Changelog
 ------------------
 v1.0 (2013-11-23)
  - initial release
+ - geocoding service added
 
 
 ------------------
