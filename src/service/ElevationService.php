@@ -67,26 +67,11 @@ class ElevationService extends AbstractService implements ServiceInterface
     public function getQueryString()
     {
         $query = array(
-            'locations' => $this->getCoordinateParameter(),
+            'locations' => $this->formatCoordinateParameter($this->coordinate_array),
             'sensor' => ($this->has_sensor) ? 'true' : 'false',
         );
         
         return http_build_query($query);
-    }
-
-    /**
-     * Prepares the coordinates for the final url parameter
-     * Structured in such a way to handle a single point or multiple points
-     *
-     * @return  string  list of locations formatted for the googles
-     */
-    protected function getCoordinateParameter()
-    {
-        $coordinate_list = array();
-        foreach ($this->coordinate_array as $coordinate) {
-            array_push($coordinate_list, implode(',', $coordinate));
-        }
-        return implode('|', $coordinate_list);
     }
 
 }
