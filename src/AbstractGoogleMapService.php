@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * This is the abstract class for all Google Map Services
+ * For licensing and examples:
+ *
+ * @see https://github.com/jacobemerick/google-map-services
+ *
+ * @author jacobemerick (http://home.jacobemerick.com/)
+ * @version 1.0 (2013-11-23)
+ */
+
+namespace GoogleMapAPI;
+
+abstract class AbstractGoogleMapService
+{
+
+    /**
+     * Flag on whether or not the requesting device has a sensor
+     * Note: the 'sensor' parameter is a required field for the API
+     */
+    protected $has_sensor = false;
+
+    /**
+     * Flag on whether or not to use SSL for the API endpoint
+     * Note: geocoding requires a secure request
+     */
+    protected $use_secure_endpoint = false;
+
+    /**
+     * Format the URL endpoint with all the parameters
+     *
+     * @param   string  $output_format  google output format (currently json or xml)
+     * @return  string  full url endpoint for the request
+     */
+    protected function getURLEndpoint($output_format)
+    {
+        $endpoint = ($this->use_secure_endpoint) ? GoogleMapServiceInterface::SECURE_ENDPOINT : GoogleMapServiceInterface::UNSECURE_ENDPOINT;
+        $service = $this->getServiceName();
+        $query_string = $this->getQueryString();
+        
+        return sprintf($endpoint, $service, $output_format, $query_string);
+    }
+
+    /**
+     * Fetch the response as a JSON string
+     *
+     * @return  string  json response from the googles
+     */
+    public function fetchJSON()
+    {
+        $url = $this->getURLEndpoint('json');
+        return $this->executeRequest($url);
+    }
+
+    /**
+     * Fetch the response as a XML string (yes, a string, you'll need to do the SimpleXML)
+     *
+     * @return  string  xml response from the googles
+     */
+    public function fetchXML()
+    {
+        $url = $this->getURLEndpoint('xml');
+        return $this->executeRequest($url);
+    }
+
+    /**
+     * Actual request execution step via the curl
+     * Accepts fully built and parameterized endpoint and asks google for information
+     *
+     * @param   $url    string  full endpoint for the service request
+     * @return  string  string response from the request
+     */
+    protected function executeRequest($url)
+    {
+        $handle = curl_init($url);
+        curl_setopt($handle, CURLOPT_RETURNTRANSFER, TRUE);
+        return curl_exec($handle);
+    }
+
+}
