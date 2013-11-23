@@ -17,7 +17,7 @@ interface GoogleMapServiceInterface
 
     /**
      * URL endpoint for API requests
-     * Note: the Geocoding API must use the secure version
+     * Note: the Time Zone API must use the secure version
      */
     const UNSECURE_ENDPOINT = 'http://maps.googleapis.com/maps/api/%s/%s?%s';
     const SECURE_ENDPOINT = 'https://maps.googleapis.com/maps/api/%s/%s?%s';
