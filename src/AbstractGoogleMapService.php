@@ -23,7 +23,7 @@ abstract class AbstractGoogleMapService
 
     /**
      * Flag on whether or not to use SSL for the API endpoint
-     * Note: geocoding requires a secure request
+     * Note: time zone requires a secure request
      */
     protected $use_secure_endpoint = false;
 
@@ -40,6 +40,21 @@ abstract class AbstractGoogleMapService
         $query_string = $this->getQueryString();
         
         return sprintf($endpoint, $service, $output_format, $query_string);
+    }
+
+    /**
+     * Helper method to format the coordinates for the final url parameter
+     * Structured in such a way to handle a single point or multiple points
+     *
+     * @return  string  list of locations formatted for the googles
+     */
+    protected function formatCoordinateParameter($coordinate_array)
+    {
+        $coordinate_list = array();
+        foreach ($coordinate_array as $coordinate) {
+            array_push($coordinate_list, implode(',', $coordinate));
+        }
+        return implode('|', $coordinate_list);
     }
 
     /**

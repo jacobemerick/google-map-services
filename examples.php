@@ -26,3 +26,26 @@ if ($xml->status == 'OK') {
         array_push($elevation_list, (float) $result->elevation);
     }
 }
+
+
+include 'src/service/GeocodeService.php';
+
+// example - get the latlng of an address
+$request = new GoogleMapAPI\Service\GeocodeService();
+$request->setAddress('Skanee, MI');
+$response = $request->fetchJSON();
+
+$json = json_decode($response);
+if ($json->status == 'OK') {
+    $coordinate = $json->results[0]->geometry->location;
+}
+
+// example (reverse geocode) - get the address of a coordinate
+$request = new GoogleMapAPI\Service\GeocodeService();
+$request->setCoordinate(46.78584, -87.72877);
+$response = $request->fetchXML();
+
+$xml = simplexml_load_string($response);
+if ($xml->status == 'OK') {
+    $address = $xml->result[0]->formatted_address;
+}
