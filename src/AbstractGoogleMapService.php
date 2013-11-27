@@ -7,7 +7,7 @@
  * @see https://github.com/jacobemerick/google-map-services
  *
  * @author jacobemerick (http://home.jacobemerick.com/)
- * @version 1.0 (2013-11-23)
+ * @version 1.1 (2013-11-27)
  */
 
 namespace GoogleMapAPI;
@@ -46,6 +46,7 @@ abstract class AbstractGoogleMapService
      * Helper method to format the coordinates for the final url parameter
      * Structured in such a way to handle a single point or multiple points
      *
+     * @param   array   $coordinate_array   array of lat/long pairs
      * @return  string  list of locations formatted for the googles
      */
     protected function formatCoordinateParameter($coordinate_array)
@@ -54,7 +55,19 @@ abstract class AbstractGoogleMapService
         foreach ($coordinate_array as $coordinate) {
             array_push($coordinate_list, implode(',', $coordinate));
         }
-        return implode('|', $coordinate_list);
+        return $this->formatArgumentArray($coordinate_list);
+    }
+
+    /**
+     * Helper method to encode multiple parameters as a single argument
+     * Basically implodes on a pipe, as per Google's spec
+     *
+     * @param   array   $argument_array     array of arguments for encoding
+     * @return  string  list of arguments encoded for Google
+     */
+    protected function formatArgumentArray(array $argument_array)
+    {
+        return implode('|', $argument_array);
     }
 
     /**

@@ -49,3 +49,48 @@ $xml = simplexml_load_string($response);
 if ($xml->status == 'OK') {
     $address = $xml->result[0]->formatted_address;
 }
+
+
+include 'src/service/DistanceMatrixService.php';
+
+// example - fetch a single distance result
+$request = new GoogleMapAPI\Service\DistanceMatrixService();
+$request->addOrigin('Houghton, MI');
+$request->addDestination('Marquette, MI');
+$response = $request->fetchJSON();
+
+$json = json_decode($response);
+if ($json->status == 'OK') {
+    if ($json->rows[0]->elements[0]->status == 'OK') {
+        $distance = $json->rows[0]->elements[0]->distance->text;
+    }
+}
+
+// example - determining the closest city
+$destination_array = array(
+    "L'Anse, MI",
+    'Ontonagon, MI',
+    'Mohawk, MI',
+);
+
+$request = new GoogleMapAPI\Service\DistanceMatrixService();
+$request->addOrigin('Houghton, MI');
+foreach ($destination_array as $destination) {
+    $request->addDestination($destination);
+}
+$response = $request->fetchXML();
+
+$xml = simplexml_load_string($response);
+if ($xml->status == 'OK') {
+    $distance_array = array();
+    foreach ($xml->row[0]->element as $element) {
+        if ($element->status == 'OK') {
+            array_push($distance_array, (string) $element->distance->value);
+        }
+    }
+    
+    asort($distance_array);
+    reset($distance_array);
+    $closest_destination_key = key($distance_array);
+    $closest_destination = $destination_array[$closest_destination_key];
+}
